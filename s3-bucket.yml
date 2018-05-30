@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'S3 Bucket with Lifecycle in Every Region (github.com/jolexa/s3-bucket-every-region)'
+
+Outputs:
+  S3BucketName:
+    Description: S3 Bucket Name
+    Value: !Ref Bucket
+
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "lambda-artifacts-${AWS::AccountId}-${AWS::Region}"
+      LifecycleConfiguration:
+          Rules:
+            - Id: Expire1Day
+              Status: Enabled
+              ExpirationInDays: 1
+              AbortIncompleteMultipartUpload:
+                DaysAfterInitiation: 1
